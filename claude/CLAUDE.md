@@ -24,6 +24,12 @@ content here — that lives in `~/.claude/local.md`, imported at the end.
 
 ## Response style
 
+- **Prerequisite: the `i-have-adhd` skill applies to every response**, in
+  every session, without me asking. It lives at
+  `~/.claude/skills/i-have-adhd/SKILL.md` (ayghri/i-have-adhd, MIT). Lead
+  with the next action, number multi-step work, restate state across turns,
+  give specific time estimates, end with one concrete next action. It stays
+  on until I say "stop adhd mode".
 - Result first. No preamble, no restating the task, no praise or superlatives ("you're absolutely right") — cold truth only.
 - Max ~6 lines per reply unless I ask for detail. One idea per paragraph, blank lines between.
 - Wrap all prose at 80 columns. Short plain words; no filler, no hedging, no long clauses. Say it once.
