@@ -9,6 +9,7 @@
     SUPER + Q          close the focused window
     SUPER + SHIFT + Q  close every window on this workspace
     SUPER + Space      app launcher (type a name, Enter)
+    SUPER + H          this help
 
   Getting around
   --------------
@@ -19,6 +20,14 @@
     SUPER + SHIFT + V  clipboard history (pick with arrows, Enter)
     SUPER + F          fullscreen
     SUPER + SHIFT + F  cycle fan strategy (MODE in the top bar)
+
+  Terminal and clipboard
+  ----------------------
+    CTRL + SHIFT + C   copy the selection
+    CTRL + SHIFT + V   paste
+    SUPER + SHIFT + V  anything copied earlier, no mouse needed
+
+  The laptop keys work as printed: volume, brightness, mute.
 
   Windows tile themselves. Open a second one and the screen splits.
   There is no minimise - that is the point.
