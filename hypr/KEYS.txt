@@ -7,6 +7,7 @@
 
     SUPER + Return     new terminal
     SUPER + Q          close the focused window
+    SUPER + SHIFT + Q  close every window on this workspace
     SUPER + Space      app launcher (type a name, Enter)
 
   Getting around
