@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+# Run the Hermes agent CLI on the Mac mini from this machine.
+#
+# Every unrecognised argument is passed straight through to the remote
+# `hermes` executable, so `hermes status` and `hermes gateway --help` behave
+# as if typed on the mini. A few local-only subcommands are added on top.
+#
+# Override the target with HERMES_HOST / HERMES_USER / HERMES_BIN.
+set -euo pipefail
+
+HOST=${HERMES_HOST:-192.168.4.147}
+USER_NAME=${HERMES_USER:-raghu}
+BIN=${HERMES_BIN:-\$HOME/.hermes/hermes-agent/venv/bin/hermes}
+LOG_DIR=${HERMES_LOG_DIR:-\$HOME/.hermes/logs}
+
+usage() {
+    cat <<USAGE
+usage: hermes <command> [args...]
+
+Local subcommands:
+  logs [name] [-f]   tail a remote log (default: gateway.error.log)
+  logs --list        list the available logs
+  shell              interactive ssh session on the mini
+  where              print the host, user and remote binary in use
+
+Anything else is forwarded to the remote hermes CLI, e.g.
+  hermes status
+  hermes gateway --help
+  hermes send --help
+USAGE
+}
+
+# Give the remote end a TTY when we have one, so chat and the TUI work.
+ssh_opts=()
+[ -t 0 ] && [ -t 1 ] && ssh_opts+=(-t)
+
+remote() {
+    ssh "${ssh_opts[@]}" "$USER_NAME@$HOST" "$@"
+}
+
+case "${1-}" in
+    ""|-h|--help|help)
+        usage
+        ;;
+    where)
+        printf 'host: %s\nuser: %s\nbin:  %s\n' "$HOST" "$USER_NAME" "$BIN"
+        ;;
+    shell)
+        shift
+        exec ssh -t "$USER_NAME@$HOST" "$@"
+        ;;
+    logs)
+        shift
+        if [ "${1-}" = "--list" ]; then
+            remote "ls -1 $LOG_DIR"
+            exit 0
+        fi
+        follow=""
+        name="gateway.error.log"
+        for arg in "$@"; do
+            case "$arg" in
+                -f|--follow) follow="-f" ;;
+                *) name="$arg" ;;
+            esac
+        done
+        remote "tail ${follow:--n 200} ${follow:+-n 50} $LOG_DIR/$name"
+        ;;
+    *)
+        remote "$BIN $(printf '%q ' "$@")"
+        ;;
+esac
