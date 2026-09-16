@@ -1,0 +1,69 @@
+# AeroSpace config mirroring the Hyprland binds in ~/.config/hypr/hyprland.conf.
+# Install to ~/.aerospace.toml (or ~/.config/aerospace/aerospace.toml) on macOS.
+#
+# $mod is SUPER on Hyprland. macOS reserves cmd for the system, so alt is used
+# here as the equivalent modifier.
+
+after-login-command = []
+after-startup-command = []
+start-at-login = true
+
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+accordion-padding = 30
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'
+
+# Matches Hyprland: gaps_in = 4, gaps_out = 8
+[gaps]
+inner.horizontal = 4
+inner.vertical = 4
+outer.left = 8
+outer.bottom = 8
+outer.top = 8
+outer.right = 8
+
+[key-mapping]
+preset = 'qwerty'
+
+[mode.main.binding]
+
+# --- launching -------------------------------------------------------------
+# SUPER + Return -> new terminal. Change 'Terminal' to your Mac terminal.
+alt-enter = 'exec-and-forget open -na Terminal'
+# SUPER + Space is the app launcher on Hyprland (wofi).
+# macOS already owns cmd-space for Spotlight, so no bind here.
+
+# --- window control --------------------------------------------------------
+alt-q = 'close'                          # SUPER + Q
+alt-v = 'layout floating tiling'         # SUPER + V  toggle floating
+alt-f = 'fullscreen'                     # SUPER + F
+
+# --- focus -----------------------------------------------------------------
+alt-left = 'focus left'
+alt-right = 'focus right'
+alt-up = 'focus up'
+alt-down = 'focus down'
+
+# --- workspaces ------------------------------------------------------------
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+alt-4 = 'workspace 4'
+alt-5 = 'workspace 5'
+
+alt-shift-1 = 'move-node-to-workspace 1'
+alt-shift-2 = 'move-node-to-workspace 2'
+alt-shift-3 = 'move-node-to-workspace 3'
+alt-shift-4 = 'move-node-to-workspace 4'
+alt-shift-5 = 'move-node-to-workspace 5'
+
+# --- housekeeping ----------------------------------------------------------
+# No Hyprland equivalent; AeroSpace has no "exit to login screen".
+alt-shift-semicolon = 'mode service'
+
+[mode.service.binding]
+esc = ['reload-config', 'mode main']
+r = ['flatten-workspace-tree', 'mode main']
+f = ['layout floating tiling', 'mode main']
