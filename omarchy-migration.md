@@ -94,3 +94,36 @@ mini or a phone during the install.
 - This Claude Code session dies at the reboot in Phase B. Everything
   needed afterwards must be in this file, on GitHub and on the USB.
 - `.claude` must be restored before Claude is useful again.
+
+## Status log
+
+**2026-09-16 10:45 — Phase A complete and verified.**
+Backup lives at `<USB DISK>/omarchy-backup-2026-09-16/`, all five
+archives pass `sha256sum -c`, zero tar warnings:
+
+| archive | size | holds |
+|---|---|---|
+| `secrets.tar.gz` | 6K | `.ssh/id_ed25519`, `.tokens`, git and bash config, `.pki`, keyrings |
+| `claude.tar.gz` | 66M | `.claude` (memory dir, `i-have-adhd` skill), `.claude.json`, `.qmd` |
+| `data.tar.gz` | 1.6G | `.config` (mozilla, chrome, board, copilot-money-cli), Arduino, jame, Pictures, Downloads, HomeBoard/wiki |
+| `arduino15.tar.gz` | 3.3G | `.arduino15` board packages |
+| `etc-nm.tar.gz` | 505B | Wi-Fi profiles incl. `menonhome` |
+
+Reference lists (rpm, flatpak, dnf history, units, nmcli) are in
+`refs/`. Both repos are committed and pushed.
+
+ISO: `omarchy-4.0.4.iso`, 6.19G, downloaded to `~/` and SHA-256 verified
+against `iso.omarchy.org` —
+`ddeded2758c48318d201dfdac905ecb28f570441883f0c052ea3cd5d05acf92d`.
+
+**Blocked: Phase B step 2.** The 31G "Flash Disk" (serial CE98A677) is
+write-protected in hardware. `dd` reported 255 MB/s into page cache and
+then failed at fsync; the kernel log is unambiguous —
+`Sense Key : Data Protect`, `Add. Sense: Write protected`,
+`Write Protect is on`. Nothing was written; it still holds the old
+Ubuntu 18.04.4 image. Either a physical lock slider is engaged, or the
+controller has latched read-only for good, which is how worn sticks die.
+
+Next action: clear the lock or find another stick (8G+), then rerun
+`~/burn-omarchy.sh` under sudo. That script re-checks the serial, so
+edit the guard if the replacement stick is a different one.
