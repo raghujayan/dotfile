@@ -88,6 +88,7 @@ mini or a phone during the install.
    ```
    tar -xzf data.tar.gz -C ~ .config/mozilla .config/google-chrome \
        .config/board .config/copilot-money-cli Arduino .arduinoIDE \
+       ".config/Arduino IDE" .config/arduino-ide \
        jame Pictures ai-by-hand Downloads board.tar.gz HomeBoard/wiki
    ```
    `.arduino15` likewise: `tar -xzf arduino15.tar.gz -C ~ .arduino15`.
@@ -111,6 +112,52 @@ mini or a phone during the install.
 Reference lists for rebuilding by hand are in `refs/`: `rpm-packages.txt`
 (Fedora names, so translate to pacman), `flatpak.txt`, `dnf-history.txt`,
 `system-units.txt`, `user-units.txt`, and `burn-omarchy.sh` itself.
+
+## The Arduino side (jame, the balancing robot)
+
+Test-restored on 2026-09-16 before the wipe: `jame`, `Arduino` and
+`.arduinoIDE` extract from `data.tar.gz` and `diff -r` clean against the
+originals. `test.cpp.ino` is byte-identical, so the tuned constants
+survive - `Kp 18.0 / Ki 0.0 / Kd 0.5`, `gyroYoffset -0.0321`,
+`targetAngle 12.00`. The esp32 core extracts from `arduino15.tar.gz`.
+
+What is where:
+
+- `jame/` - the sketch `test.cpp/test.cpp.ino`, `project_guide.md`,
+  `build_notebook.md`, and the wiring images in `media/`. The only
+  sketch of yours on the machine; everything else under `Arduino/` is
+  library examples.
+- `Arduino/libraries/` - Adafruit BusIO, GFX, SSD1306, MPU6050,
+  Unified_Sensor.
+- `.arduino15/packages/esp32/hardware/esp32/3.3.11` - the ESP32 core.
+  Restoring it from the archive skips a ~1.7G re-download.
+- `.arduinoIDE/arduino-cli.yaml` - holds the ESP32 board-manager URL
+  and points `data` at `~/.arduino15`, `user` at `~/Arduino`. Those are
+  absolute paths under `/home/rmenon`, which is why Phase B keeps the
+  username `rmenon`. A different username silently breaks them.
+
+The data migrates cleanly. The hitches on the other side are all
+environmental:
+
+1. **Serial port group.** Fedora puts you in `dialout` (you are, gid
+   18). Arch does not use it - `ttyUSB*`/`ttyACM*` belong to **`uucp`**.
+   Without this the IDE shows no port and blames the board:
+   `sudo usermod -aG uucp,lock rmenon`, then log out and back in.
+2. **brltty.** It is installed here and harmless, but on Arch its udev
+   rules grab CH340-based USB-serial adapters and the port vanishes a
+   second after you plug the board in. If the port flaps, remove it:
+   `sudo pacman -Rns brltty`.
+3. **The IDE itself is not in the backup** - the AppImage was skipped
+   deliberately. On Omarchy install it with the AUR helper it ships:
+   `yay -S arduino-ide-bin`, or `sudo pacman -S arduino-cli` if you
+   would rather work from the terminal. Restore `.arduinoIDE` and
+   `.arduino15` *before* first launch so it finds the core and does not
+   offer to download everything again.
+4. **Check the board is seen** before blaming anything else:
+   `ls -l /dev/ttyUSB* /dev/ttyACM*`, and `dmesg | tail` on plug-in.
+   The kernel drivers (`cp210x`, `ch341`, `ftdi_sio`) ship with Arch's
+   default kernel; nothing to install. No custom udev rules exist on
+   this machine, so there are none to carry over.
 
 ## Off-machine copies
 
