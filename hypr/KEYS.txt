@@ -1,0 +1,26 @@
+
+  HYPRLAND - the only four keys you need
+  =====================================
+
+    SUPER + M          QUIT.  Drops you at the login screen.
+                       Click the gear, pick GNOME, and you are home.
+
+    SUPER + Return     new terminal
+    SUPER + Q          close the focused window
+    SUPER + Space      app launcher (type a name, Enter)
+
+  Getting around
+  --------------
+    SUPER + arrows     move focus between windows
+    SUPER + 1..5       switch workspace
+    SUPER + SHIFT + 1..5   throw the window to that workspace
+    SUPER + V          toggle floating for this window
+    SUPER + F          fullscreen
+    SUPER + SHIFT + F  cycle fan strategy (MODE in the top bar)
+
+  Windows tile themselves. Open a second one and the screen splits.
+  There is no minimise - that is the point.
+
+  Nothing here is permanent. GNOME is untouched and one SUPER+M away.
+  This file: ~/.config/hypr/KEYS.txt
+
