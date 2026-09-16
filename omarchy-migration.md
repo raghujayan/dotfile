@@ -148,9 +148,12 @@ environmental:
    second after you plug the board in. If the port flaps, remove it:
    `sudo pacman -Rns brltty`.
 3. **The IDE itself is not in the backup** - the AppImage was skipped
-   deliberately. On Omarchy install it with the AUR helper it ships:
-   `yay -S arduino-ide-bin`, or `sudo pacman -S arduino-cli` if you
-   would rather work from the terminal. Restore `.arduinoIDE` and
+   deliberately, and it did not need backing up. Checked against the
+   repos on 2026-09-16: AUR carries `arduino-ide-bin` at **2.3.10**,
+   the same version as the AppImage here, and `arduino-cli` 1.5.1 is
+   in `extra`. So `yay -S arduino-ide-bin`, or
+   `sudo pacman -S arduino-cli` to work from the terminal. The old
+   AppImage is a fallback if you keep a copy, but it needs `fuse2`. Restore `.arduinoIDE` and
    `.arduino15` *before* first launch so it finds the core and does not
    offer to download everything again.
 4. **Check the board is seen** before blaming anything else:
