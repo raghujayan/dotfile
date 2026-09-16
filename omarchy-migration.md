@@ -127,3 +127,46 @@ controller has latched read-only for good, which is how worn sticks die.
 Next action: clear the lock or find another stick (8G+), then rerun
 `~/burn-omarchy.sh` under sudo. That script re-checks the serial, so
 edit the guard if the replacement stick is a different one.
+
+**2026-09-16 11:05 — installer stick is written and verified.**
+
+Three sticks were tried. Worth recording, because the failure was not
+obvious from the outside:
+
+- Generic "Flash Disk" CE98A677, 31.3G — **dead**. Its Mode Sense
+  reports `Write Protect is off` while every actual write comes back
+  `Not Ready` then `Data Protect / Write protected` at sector 0. A
+  worn controller latching read-only. A plain `dd` hides this: it hit
+  255 MB/s writing into page cache and only failed at fsync. The burn
+  script now writes one 4K block with `oflag=direct` and reads it back
+  before touching anything, so a stick like this fails in a second.
+- SanDisk Cruzer Contour U3 3550010EEB6079AB, 30.4G — **used**. Held a
+  BitLocker volume labelled `DESKTOP-T8STEP1 VAIDEHI 5/22/2018` whose
+  password was long forgotten; wiped with permission. Wrote at
+  8.7 MB/s over 708 s and the read-back hash matches the ISO.
+
+`~/burn-omarchy.sh <SERIAL>` resolves a serial to its device itself, so
+the `sdb`/`sdc` shuffle between replugs cannot mislead it, and it
+refuses the backup disk (`0700199D3BA32D10`) outright.
+
+## Phase B — from here, with the machine offline
+
+1. Leave both USB devices in: the Cruzer (installer) and the 932G
+   USB DISK (backup).
+2. Reboot. At the Framework logo press **F2** for setup.
+3. Security -> Secure Boot -> **Disabled**. It is enabled today and the
+   Omarchy ISO will not boot until it is off. Save and exit (F10).
+4. Press **F12** for the boot menu, pick the Cruzer (UEFI entry).
+5. Omarchy 4.0.4 asks about five things. Answers:
+   - disk: `nvme0n1` (476.9G WDC PC SN730). **Not** either USB.
+   - full-disk encryption: yes. Choose a LUKS passphrase and write it
+     on paper before typing it. There is no encryption today, so this
+     is new, and forgetting it means the disk is gone.
+   - user: `rmenon`, so every restored path lines up.
+   - hostname: `framework` keeps the mac mini's ssh config valid.
+   - timezone/locale: as before.
+6. Install runs 2-10 minutes, then reboots into Hyprland.
+
+Note: the Cruzer is a U3 stick and exposes a small fake CD-ROM
+(`/dev/sr0`, "LIVEU3") from firmware. If F12 lists two Cruzer entries,
+take the larger/UEFI one, not the CD.
