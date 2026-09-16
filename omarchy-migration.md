@@ -136,8 +136,26 @@ What is where:
   absolute paths under `/home/rmenon`, which is why Phase B keeps the
   username `rmenon`. A different username silently breaks them.
 
-The data migrates cleanly. The hitches on the other side are all
-environmental:
+**All of this is scripted.** On the new machine, with the backup USB
+plugged in, run one command and JAME is back:
+
+```
+~/dotfile/restore-jame.sh          # or /mnt/usb/restore-jame.sh
+```
+
+It finds the backup wherever it mounted, checks both archives against
+`SHA256SUMS`, restores the sketch, libraries, IDE config and the ESP32
+core, adds the serial groups, checks for brltty, installs the IDE from
+the AUR, then verifies the lot and prints what to do next. Re-running it
+is safe - it refuses to overwrite a `~/jame` that already exists.
+
+Tested on 2026-09-16 against the real archives in a sandboxed HOME, with
+`sudo`, `usermod`, `pacman` and `yay` stubbed: restores clean, second run
+is a no-op, and it skips `.arduino15/staging` and `tmp` so it writes
+5.9G instead of 7.5G.
+
+The steps it performs, for when it does not work and you are reading
+this on a phone. The hitches are all environmental:
 
 1. **Serial port group.** Fedora puts you in `dialout` (you are, gid
    18). Arch does not use it - `ttyUSB*`/`ttyACM*` belong to **`uucp`**.
