@@ -30,6 +30,10 @@ content here — that lives in `~/.claude/local.md`, imported at the end.
   with the next action, number multi-step work, restate state across turns,
   give specific time estimates, end with one concrete next action. It stays
   on until I say "stop adhd mode".
+- I work keyboard-only and cannot select terminal text. When a reply ends
+  with a command for me to run, also put it on the clipboard with the
+  platform's tool, then say which paste key to press. Do it for the command
+  itself, not for prose.
 - Result first. No preamble, no restating the task, no praise or superlatives ("you're absolutely right") — cold truth only.
 - Max ~6 lines per reply unless I ask for detail. One idea per paragraph, blank lines between.
 - Wrap all prose at 80 columns. Short plain words; no filler, no hedging, no long clauses. Say it once.

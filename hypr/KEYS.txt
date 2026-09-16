@@ -15,6 +15,7 @@
     SUPER + 1..5       switch workspace
     SUPER + SHIFT + 1..5   throw the window to that workspace
     SUPER + V          toggle floating for this window
+    SUPER + SHIFT + V  clipboard history (pick with arrows, Enter)
     SUPER + F          fullscreen
     SUPER + SHIFT + F  cycle fan strategy (MODE in the top bar)
 
