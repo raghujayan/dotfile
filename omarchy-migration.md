@@ -54,35 +54,70 @@ mini or a phone during the install.
    spot-check each one before trusting it.
 6. Copy this file to the USB root.
 
-## Phase B -- install, manual, machine offline (you do this)
+## Phase C — restore, on Omarchy first boot
 
-1. **Use a SECOND USB stick for the ISO.** `sda` is the backup disk;
-   writing the ISO to it destroys everything Phase A just saved.
-   If there is only one stick, stop -- back up to the mac mini over
-   the LAN instead and re-plan.
-2. Download the ISO from https://omarchy.org/ and write it with
-   `caligula` (Linux) or balenaEtcher (Mac).
-3. Reboot -> **F2** -> disable Secure Boot (and TPM if the installer
-   complains). Save and exit.
-4. **F12** -> boot the ISO stick.
-5. In the installer: select `nvme0n1`, accept full-disk encryption, set
-   the LUKS passphrase, user `rmenon`. Install takes 2-10 min.
+1. Join Wi-Fi. Omarchy uses **iwd**, not NetworkManager — run `impala`
+   (or `iwctl station wlan0 connect menonhome`). `etc-nm.tar.gz` is a
+   *reference* for the passphrase, not a drop-in: untar it and read
+   `psk=` out of `menonhome.nmconnection`.
+2. Plug the 932G backup disk back in and mount it by hand; do not
+   assume it automounts:
+   ```
+   lsblk                                  # find the 932G exfat partition
+   sudo mkdir -p /mnt/usb && sudo mount /dev/sdX1 /mnt/usb
+   cd /mnt/usb/omarchy-backup-2026-09-16 && sha256sum -c SHA256SUMS
+   ```
+   exfat is in the kernel; no package needed.
+3. **Do not extract `secrets.tar.gz` or `data.tar.gz` into `$HOME`
+   wholesale.** Both carry Fedora/GNOME dotfiles that would overwrite
+   Omarchy's own. `secrets.tar.gz` has `.bashrc` and `.bash_profile`,
+   and Omarchy's versions source its defaults and start Hyprland on
+   tty1 — clobbering them drops you to a bare shell. Stage and pick:
+   ```
+   mkdir -p ~/restore && tar -xzf secrets.tar.gz -C ~/restore
+   cp -a ~/restore/.ssh ~/restore/.tokens ~/restore/.gitconfig ~/restore/.pki ~/
+   mkdir -p ~/.local/share && cp -a ~/restore/.local/share/keyrings ~/.local/share/
+   chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_ed25519
+   ```
+   Diff `~/restore/.bashrc` against the new one by hand later; take only
+   the aliases you want.
+4. `claude.tar.gz` is safe whole: `tar -xzf claude.tar.gz -C ~`.
+5. `data.tar.gz` by named path only, never the whole archive — it holds
+   all of `.config`, GNOME's `gtk-3.0`, `dconf` and `mimeapps.list`
+   included, which would undo Omarchy's theming:
+   ```
+   tar -xzf data.tar.gz -C ~ .config/mozilla .config/google-chrome \
+       .config/board .config/copilot-money-cli Arduino .arduinoIDE \
+       jame Pictures ai-by-hand Downloads board.tar.gz HomeBoard/wiki
+   ```
+   `.arduino15` likewise: `tar -xzf arduino15.tar.gz -C ~ .arduino15`.
+6. Clone and rebuild:
+   ```
+   git clone git@github.com:raghujayan/HomeBoard.git
+   git clone git@github.com:raghujayan/dotfile.git
+   cd HomeBoard && python -m venv .venv && .venv/bin/pip install -r requirements.txt
+   ```
+   `requirements.txt` does **not** list torch, which `wiki_index.py`
+   needs. The exact set that worked is in
+   `refs/homeboard-venv-freeze.txt` (100 packages, Python 3.14.3) —
+   use it if the wiki indexer misbehaves.
+7. Install Claude Code, re-auth, confirm `~/.claude/projects/
+   -home-rmenon-HomeBoard/memory/MEMORY.md` and
+   `~/.claude/skills/i-have-adhd/SKILL.md` came back.
+8. Re-enroll the fingerprint reader — `fprintd-enroll`, not portable.
+9. Verify: `ssh raghu@192.168.4.147`, `git push` from both repos,
+   browser profiles open, Arduino IDE sees its boards.
 
-## Phase C -- restore, on Omarchy first boot
+Reference lists for rebuilding by hand are in `refs/`: `rpm-packages.txt`
+(Fedora names, so translate to pacman), `flatpak.txt`, `dnf-history.txt`,
+`system-units.txt`, `user-units.txt`, and `burn-omarchy.sh` itself.
 
-1. Join Wi-Fi, mount the backup USB.
-2. Verify `sha256sum -c SHA256SUMS`, then untar `secrets.tar.gz` and
-   `claude.tar.gz` into `$HOME` first.
-3. `git clone` HomeBoard and dotfile; rebuild the venv
-   (`uv venv && uv pip install -r requirements.txt` or equivalent);
-   restore `HomeBoard/wiki` from `data.tar.gz`.
-4. Install Claude Code, re-auth, confirm the memory dir at
-   `~/.claude/projects/-home-rmenon-HomeBoard/memory/` loads and the
-   `i-have-adhd` skill is present.
-5. Restore `/etc/NetworkManager/system-connections` if Wi-Fi needs it.
-6. Re-enroll the fingerprint reader (not portable).
-7. Verify: `ssh raghu@192.168.4.147` works, `git push` works from both
-   repos, browser profiles opened, Arduino IDE sees its boards.
+## Off-machine copies
+
+- This file: GitHub `raghujayan/dotfile`, USB root, and the mac mini.
+- `secrets.tar.gz`, `claude.tar.gz`, `etc-nm.tar.gz`, `SHA256SUMS`:
+  also at `raghu@192.168.4.147:~/omarchy-backup/`, so the irreplaceable
+  66M does not sit on one stick.
 
 ## Risks
 
@@ -151,8 +186,10 @@ refuses the backup disk (`0700199D3BA32D10`) outright.
 
 ## Phase B — from here, with the machine offline
 
-1. Leave both USB devices in: the Cruzer (installer) and the 932G
-   USB DISK (backup).
+1. **Unplug the 932G backup disk.** Leave only the Cruzer in. That
+   disk is the one copy of everything irreplaceable, and a mis-click
+   in the installer's disk picker is the only way left to lose it.
+   Plug it back in for Phase C.
 2. Reboot. At the Framework logo press **F2** for setup.
 3. Security -> Secure Boot -> **Disabled**. It is enabled today and the
    Omarchy ISO will not boot until it is off. Save and exit (F10).
@@ -163,7 +200,9 @@ refuses the backup disk (`0700199D3BA32D10`) outright.
      on paper before typing it. There is no encryption today, so this
      is new, and forgetting it means the disk is gone.
    - user: `rmenon`, so every restored path lines up.
-   - hostname: `framework` keeps the mac mini's ssh config valid.
+   - hostname: `framework`, if it asks; otherwise
+     `hostnamectl set-hostname framework` afterwards. Keeps the mac
+     mini's ssh config valid.
    - timezone/locale: as before.
 6. Install runs 2-10 minutes, then reboots into Hyprland.
 
