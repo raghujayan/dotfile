@@ -48,10 +48,10 @@ cat > "$tmp/left" <<'COL'
 
   Where windows land (set in aerospace.toml)
   ------------------------------------------
-    1  Terminal, Ghostty, Docker
-    2  Teams, Outlook, Mail
-    3  Word, PowerPoint, Typora, draw.io
-    4  Chrome, Claude, ChatGPT, DuckDuckGo
+    1  Ghostty, Terminal, Docker
+    2  Chrome, DuckDuckGo
+    3  Claude, ChatGPT, Word, PowerPoint, Typora, draw.io
+    4  Teams, Outlook, Mail
     Floating: System Settings, Preview, Stickies,
               Screen Sharing, NoMachine, Finder
 COL
