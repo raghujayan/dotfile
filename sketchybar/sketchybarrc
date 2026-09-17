@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# SketchyBar config mirroring the waybar modules: workspaces, focused window
+# title, CPU, RAM. Text labels only (no nerd font), like waybar/README.md.
+#
+# Geometry (built-in 14" display, menu bar auto-hidden): macOS keeps the
+# 32 pt notch strip out of every window, so the bar lives there at height 32
+# and aerospace.toml needs no extra top gap. The notch hides the "center"
+# slot, so the title sits at "q" (left of the notch).
+
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+
+sketchybar --bar position=top height=32 color=0xff1e1e2e padding_left=8 padding_right=8
+
+sketchybar --default \
+  padding_left=4 padding_right=4 \
+  label.color=0xffcdd6f4 \
+  label.padding_left=6 label.padding_right=6 \
+  icon.drawing=off
+
+# --- workspaces (left) ------------------------------------------------------
+sketchybar --add event aerospace_workspace_change
+
+for sid in $(aerospace list-workspaces --all); do
+  sketchybar --add item space."$sid" left \
+    --subscribe space."$sid" aerospace_workspace_change \
+    --set space."$sid" \
+      label="$sid" \
+      background.color=0xff89b4fa \
+      background.corner_radius=4 \
+      background.height=22 \
+      background.drawing=off \
+      click_script="aerospace workspace $sid" \
+      script="$PLUGIN_DIR/aerospace.sh $sid"
+done
+
+# --- focused window title (left of the notch) -------------------------------
+sketchybar --add item title q \
+  --subscribe title front_app_switched aerospace_workspace_change \
+  --set title \
+    label.max_chars=55 \
+    update_freq=5 \
+    script="$PLUGIN_DIR/title.sh"
+
+# --- CPU / RAM (right) ------------------------------------------------------
+sketchybar --add item mem right \
+  --set mem update_freq=5 script="$PLUGIN_DIR/mem.sh" \
+  --add item cpu right \
+  --set cpu update_freq=5 script="$PLUGIN_DIR/cpu.sh"
+
+# aerospace only exports FOCUSED_WORKSPACE on a switch; seed the highlight.
+sketchybar --update
+sketchybar --trigger aerospace_workspace_change \
+  FOCUSED_WORKSPACE="$(aerospace list-workspaces --focused)"
