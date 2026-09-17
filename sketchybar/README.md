@@ -31,9 +31,9 @@ The title sits at `q` instead of `center` because on the notched display a
 centred item is hidden behind the notch.
 
 Bar height is 32, the height of the notch strip macOS already keeps windows
-out of, so `gaps.outer.top` in aerospace.toml stays at 8. Verified on the
-built-in display only; an external display with the menu bar auto-hidden
-would have the bar over the window tops.
+out of, so `gaps.outer.top` in aerospace.toml is 8 on the built-in display
+and 40 (bar + 8) on any other monitor, where nothing else reserves the
+strip. The 40 is untested until an external display is plugged in.
 
 Right-side order follows `waybar/config.jsonc`. The menu bar on this
 machine is auto-hidden, which is why volume, network, battery and clock

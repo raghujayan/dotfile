@@ -31,7 +31,10 @@ inner.horizontal = 4
 inner.vertical = 4
 outer.left = 8
 outer.bottom = 8
-outer.top = 8
+# Top: SketchyBar is 32 high. On the notch display macOS already keeps
+# windows out of that strip, so 8 is enough; elsewhere the bar would sit
+# on the windows, so 32 + 8.
+outer.top = [{ monitor.'built-in' = 8 }, 40]
 outer.right = 8
 
 # --- window rules ----------------------------------------------------------
