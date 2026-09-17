@@ -1,7 +1,7 @@
 # SketchyBar
 
 Top bar for the Mac, mirroring the waybar modules on the Fedora machine:
-workspaces, focused window title, CPU, RAM. Text labels only, no nerd font,
+workspaces, CPU, RAM, and the menu-bar items. Text labels only, no nerd font,
 for the same keyboard-only reason as `waybar/README.md`.
 
 ## Install
@@ -23,12 +23,11 @@ exists, `sketchybar --reload` will not find the config; run
 
 | Slot | Item | Source |
 |---|---|---|
-| left | `1 term 2 web 3 ai 4 office 5 productivity`, focused one highlighted; click switches | `plugins/aerospace.sh` |
-| q (left of notch) | focused window title, max 55 chars | `plugins/title.sh` |
+| left | `1-term 2-web 3-ai 4-office 5-productivity`, focused one highlighted; click switches | `plugins/aerospace.sh` |
 | right | `VOL nn%` (mute), `NET ssid` (ip / off), `CPU nn%`, `RAM nn%`, `BAT nn%` (AC), clock | `plugins/volume.sh` … `clock.sh` |
 
-The title sits at `q` instead of `center` because on the notched display a
-centred item is hidden behind the notch.
+No window title: it overlapped the workspace names, and the window shows
+its own title bar. Nothing sits at `center`, which the notch would hide.
 
 Bar height is 32, the height of the notch strip macOS already keeps windows
 out of, so `gaps.outer.top` in aerospace.toml is 8 on the built-in display

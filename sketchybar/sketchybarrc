@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# SketchyBar config mirroring the waybar modules: workspaces, focused window
-# title, CPU, RAM. Text labels only (no nerd font), like waybar/README.md.
+# SketchyBar config mirroring the waybar modules: workspaces, CPU, RAM and
+# the menu-bar items. Text labels only (no nerd font), like waybar/README.md.
 #
 # Geometry (built-in 14" display, menu bar auto-hidden): macOS keeps the
 # 32 pt notch strip out of every window, so the bar lives there at height 32
 # and aerospace.toml needs no extra top gap. The notch hides the "center"
-# slot, so the title sits at "q" (left of the notch).
+# slot; nothing is placed there.
 
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 
@@ -18,7 +18,7 @@ sketchybar --default \
   icon.drawing=off
 
 # --- workspaces (left) ------------------------------------------------------
-# Number as the icon, a short name as the label. Names mirror the routing
+# Number as the icon, "-name" as the label: reads 1-term. Names mirror the routing
 # rules in aerospace/aerospace.toml; a workspace without a name shows only
 # its number. (case, not an associative array: /bin/bash is 3.2.)
 ws_name() {
@@ -42,7 +42,7 @@ for sid in $(aerospace list-workspaces --all); do
       icon.drawing=on \
       icon.color=0xffcdd6f4 \
       icon.padding_left=6 \
-      label="$(ws_name "$sid")" \
+      label="$(name="$(ws_name "$sid")"; [ -n "$name" ] && echo "-$name")" \
       label.color=0xffa6adc8 \
       label.padding_left=0 \
       background.color=0xff89b4fa \
@@ -52,14 +52,6 @@ for sid in $(aerospace list-workspaces --all); do
       click_script="aerospace workspace $sid" \
       script="$PLUGIN_DIR/aerospace.sh $sid"
 done
-
-# --- focused window title (left of the notch) -------------------------------
-sketchybar --add item title q \
-  --subscribe title front_app_switched aerospace_workspace_change \
-  --set title \
-    label.max_chars=55 \
-    update_freq=5 \
-    script="$PLUGIN_DIR/title.sh"
 
 # --- right side, waybar order left->right: VOL NET CPU RAM BAT clock --------
 # Right items stack from the edge, so they are added in reverse.
