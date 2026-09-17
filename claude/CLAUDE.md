@@ -87,4 +87,13 @@ content here — that lives in `~/.claude/local.md`, imported at the end.
 4. **After implementation:** run tests, report results, summarize what changed vs. planned. Flag deviations.
 5. **Never mix exploration/research with implementation** in the same session. Plan in one session, execute in another.
 
+## Response format: i-have-adhd (ALWAYS, every reply)
+
+- ALWAYS apply the `i-have-adhd` skill (`~/.claude/skills/i-have-adhd/SKILL.md`)
+  to every reply, in every session, without being asked. This overrides the
+  "Response style" section above where they conflict.
+- Core rules, restated so they are never missed: one sentence per line; hard
+  wrap at 80 columns; result first; start every reply with the separator line
+  `────────────────────────────────────────`.
+
 @~/.claude/local.md
