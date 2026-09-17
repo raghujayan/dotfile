@@ -30,8 +30,8 @@ preset = 'qwerty'
 [mode.main.binding]
 
 # --- launching -------------------------------------------------------------
-# SUPER + Return -> new terminal. Change 'Terminal' to your Mac terminal.
-alt-enter = 'exec-and-forget open -na Terminal'
+# SUPER + Return -> new Ghostty window.
+alt-enter = 'exec-and-forget open -na Ghostty'
 # SUPER + Space is the app launcher on Hyprland (wofi).
 # macOS already owns cmd-space for Spotlight, so no bind here.
 

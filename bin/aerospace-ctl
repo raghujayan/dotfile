@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Switch AeroSpace tiling on, off, or out of the way entirely.
+#
+#   off        keep AeroSpace running but stop managing windows and binds
+#   on         resume tiling
+#   toggle     flip between on and off
+#   quit       stop the app (it comes back at next login while installed)
+#   start      launch the app
+#   status     say whether it is running and managing windows
+#   uninstall  quit, remove the cask, the config symlink and the login item
+set -euo pipefail
+
+CONFIG_LINK="$HOME/.aerospace.toml"
+
+usage() {
+    sed -n '2,10p' "$0" | sed 's/^# \{0,1\}//'
+    exit 1
+}
+
+running() { pgrep -xq AeroSpace; }
+
+case "${1:-}" in
+    off|on|toggle)
+        running || { echo "AeroSpace is not running"; exit 1; }
+        aerospace enable "$1"
+        echo "tiling: $1"
+        ;;
+    quit)
+        running || { echo "AeroSpace is not running"; exit 0; }
+        aerospace enable off 2>/dev/null || true   # bring hidden windows back first
+        osascript -e 'quit app "AeroSpace"'
+        echo "AeroSpace quit"
+        ;;
+    start)
+        open -a AeroSpace
+        echo "AeroSpace started"
+        ;;
+    status)
+        if ! running; then echo "not running"; exit 0; fi
+        if aerospace list-workspaces --focused >/dev/null 2>&1; then
+            echo "running, server up"
+        else
+            echo "running, server not responding (Accessibility not granted?)"
+        fi
+        ;;
+    uninstall)
+        read -r -p "Remove AeroSpace, its login item and $CONFIG_LINK? [y/N] " ans
+        [[ "$ans" == [yY] ]] || { echo "aborted"; exit 1; }
+        if running; then
+            aerospace enable off 2>/dev/null || true   # bring hidden windows back first
+            osascript -e 'quit app "AeroSpace"'
+        fi
+        osascript -e 'tell application "System Events" to delete login item "AeroSpace"' 2>/dev/null || true
+        brew uninstall --cask aerospace
+        [[ -L "$CONFIG_LINK" ]] && rm "$CONFIG_LINK"
+        echo "AeroSpace removed; dotfiles/aerospace kept for reinstall"
+        ;;
+    *) usage ;;
+esac
