@@ -91,7 +91,7 @@ run = 'move-node-to-workspace 1'
 if.app-id = 'com.electron.dockerdesktop'
 run = 'move-node-to-workspace 1'
 
-# 4: communication
+# 4: office
 [[on-window-detected]]
 if.app-id = 'com.microsoft.teams2'
 run = 'move-node-to-workspace 4'
@@ -104,22 +104,22 @@ run = 'move-node-to-workspace 4'
 if.app-id = 'com.apple.mail'
 run = 'move-node-to-workspace 4'
 
-# 3: documents and chat assistants
+# 3: chat assistants (Word/PowerPoint -> 4, Typora/draw.io -> 5)
 [[on-window-detected]]
 if.app-id = 'com.microsoft.Word'
-run = 'move-node-to-workspace 3'
+run = 'move-node-to-workspace 4'
 
 [[on-window-detected]]
 if.app-id = 'com.microsoft.Powerpoint'
-run = 'move-node-to-workspace 3'
+run = 'move-node-to-workspace 4'
 
 [[on-window-detected]]
 if.app-id = 'abnerworks.Typora'
-run = 'move-node-to-workspace 3'
+run = 'move-node-to-workspace 5'
 
 [[on-window-detected]]
 if.app-id = 'com.jgraph.drawio.desktop'
-run = 'move-node-to-workspace 3'
+run = 'move-node-to-workspace 5'
 
 # 2: browsers
 [[on-window-detected]]

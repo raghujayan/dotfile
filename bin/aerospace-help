@@ -48,10 +48,11 @@ cat > "$tmp/left" <<'COL'
 
   Where windows land (set in aerospace.toml)
   ------------------------------------------
-    1  Ghostty, Terminal, Docker
-    2  Chrome, DuckDuckGo
-    3  Claude, ChatGPT, Word, PowerPoint, Typora, draw.io
-    4  Teams, Outlook, Mail
+    1 term          Ghostty, Terminal, Docker
+    2 web           Chrome, DuckDuckGo
+    3 ai            Claude, ChatGPT
+    4 office        Teams, Outlook, Mail, Word, PowerPoint
+    5 productivity  draw.io, Typora
     Floating: System Settings, Preview, Stickies,
               Screen Sharing, NoMachine, Finder
 COL
@@ -74,7 +75,7 @@ cat > "$tmp/right" <<'COL'
 
   Top bar (SketchyBar)
   --------------------
-    1 2 3 4 5          workspaces, click to switch
+    1 term .. 5 productivity   workspaces, click to switch
     title              focused window title
     VOL NET CPU RAM BAT clock
     The macOS menu bar is hidden: touch the
