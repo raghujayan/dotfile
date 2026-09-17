@@ -41,11 +41,24 @@ sketchybar --add item title q \
     update_freq=5 \
     script="$PLUGIN_DIR/title.sh"
 
-# --- CPU / RAM (right) ------------------------------------------------------
-sketchybar --add item mem right \
+# --- right side, waybar order left->right: VOL NET CPU RAM BAT clock --------
+# Right items stack from the edge, so they are added in reverse.
+# The menu bar is auto-hidden on this machine, hence VOL/NET/BAT/clock here.
+sketchybar --add item clock right \
+  --set clock update_freq=30 script="$PLUGIN_DIR/clock.sh" \
+  --add item battery right \
+  --subscribe battery system_woke power_source_change \
+  --set battery update_freq=120 script="$PLUGIN_DIR/battery.sh" \
+  --add item mem right \
   --set mem update_freq=5 script="$PLUGIN_DIR/mem.sh" \
   --add item cpu right \
-  --set cpu update_freq=5 script="$PLUGIN_DIR/cpu.sh"
+  --set cpu update_freq=5 script="$PLUGIN_DIR/cpu.sh" \
+  --add item wifi right \
+  --subscribe wifi wifi_change \
+  --set wifi update_freq=30 script="$PLUGIN_DIR/wifi.sh" \
+  --add item volume right \
+  --subscribe volume volume_change \
+  --set volume script="$PLUGIN_DIR/volume.sh"
 
 # aerospace only exports FOCUSED_WORKSPACE on a switch; seed the highlight.
 sketchybar --update

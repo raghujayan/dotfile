@@ -25,7 +25,7 @@ exists, `sketchybar --reload` will not find the config; run
 |---|---|---|
 | left | `1 2 3 4 5`, focused one highlighted; click switches | `plugins/aerospace.sh` |
 | q (left of notch) | focused window title, max 55 chars | `plugins/title.sh` |
-| right | `CPU nn%`, `RAM nn%`, 5 s refresh | `plugins/cpu.sh`, `plugins/mem.sh` |
+| right | `VOL nn%` (mute), `NET ssid` (ip / off), `CPU nn%`, `RAM nn%`, `BAT nn%` (AC), clock | `plugins/volume.sh` … `clock.sh` |
 
 The title sits at `q` instead of `center` because on the notched display a
 centred item is hidden behind the notch.
@@ -35,7 +35,7 @@ out of, so `gaps.outer.top` in aerospace.toml stays at 8. Verified on the
 built-in display only; an external display with the menu bar auto-hidden
 would have the bar over the window tops.
 
-Battery, clock, wifi and volume are not in the bar; they stay on the macOS
-menu bar, which on this machine is auto-hidden and shows only when the
-pointer touches the top edge. Temperature and fan are left out: macOS
-exposes them only through `sudo powermetrics`.
+Right-side order follows `waybar/config.jsonc`. The menu bar on this
+machine is auto-hidden, which is why volume, network, battery and clock
+are in the bar at all. Temperature and fan are left out: macOS exposes
+them only through `sudo powermetrics`.
