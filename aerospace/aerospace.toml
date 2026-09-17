@@ -143,9 +143,18 @@ alt-enter = 'exec-and-forget open -na Ghostty'
 alt-q = 'close'                          # SUPER + Q
 alt-v = 'layout floating tiling'         # SUPER + V  toggle floating
 alt-f = 'fullscreen'                     # SUPER + F
-# ALT + /   tiles <-> accordion.  Accordion stacks every window behind
-#           one; if the screen suddenly shows a single window, press this.
-alt-slash = 'layout tiles accordion'
+# ALT + /   back to tiles.  If the screen suddenly shows a single window
+#           with padding at the sides, that is accordion; press this.
+alt-slash = 'layout tiles'
+# ALT + SHIFT + arrows   join this window with its neighbour in that
+#           direction so the pair shares one column (or row); four in a
+#           row become a 2x2 in two presses. AeroSpace has no automatic
+#           grid (dwindle) layout; this is the manual one.
+#           Undo: ALT + SHIFT + ;  then  r  (flatten the workspace).
+alt-shift-left = 'join-with left'
+alt-shift-right = 'join-with right'
+alt-shift-up = 'join-with up'
+alt-shift-down = 'join-with down'
 
 # --- focus -----------------------------------------------------------------
 alt-left = 'focus left'

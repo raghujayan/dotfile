@@ -20,5 +20,6 @@ Launch AeroSpace, then grant it Accessibility permission when prompted.
 | `SUPER + Space` (wofi) | unbound | Spotlight already owns `cmd-space` |
 | `SUPER + M` (exit session) | none | AeroSpace has no logout command |
 | volume / brightness binds | none | macOS handles the media keys natively |
+| dwindle layout (automatic grid) | `alt-shift-arrows` = `join-with` | AeroSpace only has tiles and accordion; the grid is built by hand |
 
 Reload config after editing: `alt-shift-;` then `esc`.
