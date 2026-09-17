@@ -12,6 +12,12 @@ after-login-command = []
 after-startup-command = []
 start-at-login = true
 
+# Tell SketchyBar which workspace is focused (step 3 of plan.md).
+# Full path so this works regardless of the exec PATH.
+exec-on-workspace-change = ['/bin/bash', '-c',
+  '/opt/homebrew/bin/sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+]
+
 enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
 
@@ -28,6 +34,100 @@ outer.bottom = 8
 outer.top = 8
 outer.right = 8
 
+# --- window rules ----------------------------------------------------------
+# Bundle IDs from `aerospace list-apps` where the app was running, else from
+# `osascript -e 'id of app "X"'`. NoMachine's session player has no stable
+# bundle id (the .app is com.nomachine.nxdock, a helper), so match its name.
+
+# Dialogs and utilities that tile badly: float them.
+[[on-window-detected]]
+if.app-id = 'com.apple.systempreferences'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Preview'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Stickies'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.ScreenSharing'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'NoMachine'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.accessibility.universalAccessAuthWarn'
+run = 'layout floating'
+
+# 1: terminals and Docker
+[[on-window-detected]]
+if.app-id = 'com.apple.Terminal'
+run = 'move-node-to-workspace 1'
+
+[[on-window-detected]]
+if.app-id = 'com.mitchellh.ghostty'
+run = 'move-node-to-workspace 1'
+
+[[on-window-detected]]
+if.app-id = 'com.electron.dockerdesktop'
+run = 'move-node-to-workspace 1'
+
+# 2: communication
+[[on-window-detected]]
+if.app-id = 'com.microsoft.teams2'
+run = 'move-node-to-workspace 2'
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.Outlook'
+run = 'move-node-to-workspace 2'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.mail'
+run = 'move-node-to-workspace 2'
+
+# 3: documents
+[[on-window-detected]]
+if.app-id = 'com.microsoft.Word'
+run = 'move-node-to-workspace 3'
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.Powerpoint'
+run = 'move-node-to-workspace 3'
+
+[[on-window-detected]]
+if.app-id = 'abnerworks.Typora'
+run = 'move-node-to-workspace 3'
+
+[[on-window-detected]]
+if.app-id = 'com.jgraph.drawio.desktop'
+run = 'move-node-to-workspace 3'
+
+# 4: browsers and chat assistants
+[[on-window-detected]]
+if.app-id = 'com.google.Chrome'
+run = 'move-node-to-workspace 4'
+
+[[on-window-detected]]
+if.app-id = 'com.anthropic.claudefordesktop'
+run = 'move-node-to-workspace 4'
+
+[[on-window-detected]]
+if.app-id = 'com.openai.codex'
+run = 'move-node-to-workspace 4'
+
+[[on-window-detected]]
+if.app-id = 'com.duckduckgo.macos.browser'
+run = 'move-node-to-workspace 4'
+
 [key-mapping]
 preset = 'qwerty'
 
@@ -43,6 +143,9 @@ alt-enter = 'exec-and-forget open -na Ghostty'
 alt-q = 'close'                          # SUPER + Q
 alt-v = 'layout floating tiling'         # SUPER + V  toggle floating
 alt-f = 'fullscreen'                     # SUPER + F
+# ALT + /   tiles <-> accordion.  Accordion stacks every window behind
+#           one; if the screen suddenly shows a single window, press this.
+alt-slash = 'layout tiles accordion'
 
 # --- focus -----------------------------------------------------------------
 alt-left = 'focus left'
