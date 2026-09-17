@@ -23,7 +23,7 @@ exists, `sketchybar --reload` will not find the config; run
 
 | Slot | Item | Source |
 |---|---|---|
-| left | `1 2 3 4 5`, focused one highlighted; click switches | `plugins/aerospace.sh` |
+| left | `1 term 2 web 3 ai 4 office 5 productivity`, focused one highlighted; click switches | `plugins/aerospace.sh` |
 | q (left of notch) | focused window title, max 55 chars | `plugins/title.sh` |
 | right | `VOL nn%` (mute), `NET ssid` (ip / off), `CPU nn%`, `RAM nn%`, `BAT nn%` (AC), clock | `plugins/volume.sh` … `clock.sh` |
 

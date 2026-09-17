@@ -18,13 +18,33 @@ sketchybar --default \
   icon.drawing=off
 
 # --- workspaces (left) ------------------------------------------------------
+# Number as the icon, a short name as the label. Names mirror the routing
+# rules in aerospace/aerospace.toml; a workspace without a name shows only
+# its number. (case, not an associative array: /bin/bash is 3.2.)
+ws_name() {
+  case "$1" in
+    1) echo term ;;
+    2) echo web ;;
+    3) echo ai ;;
+    4) echo office ;;
+    5) echo productivity ;;
+    *) echo "" ;;
+  esac
+}
+
 sketchybar --add event aerospace_workspace_change
 
 for sid in $(aerospace list-workspaces --all); do
   sketchybar --add item space."$sid" left \
     --subscribe space."$sid" aerospace_workspace_change \
     --set space."$sid" \
-      label="$sid" \
+      icon="$sid" \
+      icon.drawing=on \
+      icon.color=0xffcdd6f4 \
+      icon.padding_left=6 \
+      label="$(ws_name "$sid")" \
+      label.color=0xffa6adc8 \
+      label.padding_left=0 \
       background.color=0xff89b4fa \
       background.corner_radius=4 \
       background.height=22 \
