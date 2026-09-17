@@ -62,6 +62,8 @@ alt-shift-5 = 'move-node-to-workspace 5'
 # --- housekeeping ----------------------------------------------------------
 # No Hyprland equivalent; AeroSpace has no "exit to login screen".
 alt-shift-semicolon = 'mode service'
+# Pause/resume tiling. The only bind that still works while tiling is off.
+alt-shift-e = 'enable toggle'
 
 [mode.service.binding]
 esc = ['reload-config', 'mode main']
