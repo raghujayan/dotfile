@@ -42,6 +42,13 @@ outer.right = 8
 # `osascript -e 'id of app "X"'`. NoMachine's session player has no stable
 # bundle id (the .app is com.nomachine.nxdock, a helper), so match its name.
 
+# alt-h help window: float it on the current workspace. Must come before
+# the Terminal -> 1 rule below; only the first matching rule runs.
+[[on-window-detected]]
+if.app-id = 'com.apple.Terminal'
+if.window-title-regex-substring = 'aerospace-help'
+run = 'layout floating'
+
 # Dialogs and utilities that tile badly: float them.
 [[on-window-detected]]
 if.app-id = 'com.apple.systempreferences'
@@ -141,6 +148,9 @@ preset = 'qwerty'
 alt-enter = 'exec-and-forget open -na Ghostty'
 # SUPER + Space is the app launcher on Hyprland (wofi).
 # macOS already owns cmd-space for Spotlight, so no bind here.
+# SUPER + H -> the keys cheat-sheet, in Terminal.app (Ghostty cannot take
+# a command from `open` while it is already running).
+alt-h = 'exec-and-forget ~/dotfiles/bin/aerospace-help open'
 
 # --- window control --------------------------------------------------------
 alt-q = 'close'                          # SUPER + Q

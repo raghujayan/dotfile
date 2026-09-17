@@ -19,6 +19,7 @@ Launch AeroSpace, then grant it Accessibility permission when prompted.
 | `SUPER` | `alt` | macOS reserves `cmd` for the system |
 | `SUPER + Space` (wofi) | unbound | Spotlight already owns `cmd-space` |
 | `SUPER + M` (exit session) | none | AeroSpace has no logout command |
+| `SUPER + H` (KEYS.txt in kitty) | `alt-h` runs `bin/aerospace-help` in Terminal.app | Ghostty ignores `-e` from `open` once it is running |
 | volume / brightness binds | none | macOS handles the media keys natively |
 | dwindle layout (automatic grid) | `alt-shift-arrows` = `join-with` | AeroSpace only has tiles and accordion; the grid is built by hand |
 

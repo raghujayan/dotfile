@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+# The AeroSpace keys, two topic columns, opened by alt-h in Terminal.app.
+# Any key closes the window. Sibling of hypr/KEYS.txt.
+
+# "open" mode (what alt-h runs): launch this script in a new Terminal.app
+# window, then bring that window back to the workspace alt-h was pressed
+# on. `open -a Terminal` activates Terminal, and AeroSpace follows the
+# focus to whatever workspace Terminal's other windows live on.
+if [ "$1" = "open" ]; then
+  ws="$(aerospace list-workspaces --focused)"
+  before="$(aerospace list-windows --all --format '%{window-id}' | sort)"
+  open -a Terminal "$0"
+  for _ in $(seq 1 30); do
+    sleep 0.1
+    id="$(comm -13 <(printf '%s\n' "$before") \
+          <(aerospace list-windows --all --format '%{window-id}' | sort) | head -1)"
+    [ -n "$id" ] && break
+  done
+  if [ -n "$id" ]; then
+    # No-ops print a tip when the window already landed right; quiet them.
+    aerospace move-node-to-workspace --window-id "$id" "$ws" >/dev/null 2>&1
+    aerospace workspace "$ws" >/dev/null 2>&1
+    aerospace focus --window-id "$id" >/dev/null 2>&1
+  fi
+  exit 0
+fi
+
+printf '\e]0;aerospace-help\a'        # title: matched by the float rule
+
+tmp="$(mktemp -d)"; trap 'rm -rf "$tmp"' EXIT
+
+cat > "$tmp/left" <<'COL'
+  AEROSPACE - the only four keys you need
+  =======================================
+
+    ALT + Return       new terminal (Ghostty)
+    ALT + Q            close the focused window
+    ALT + H            this help (any key closes it)
+    ALT + SHIFT + E    pause / resume tiling
+
+  Getting around
+  --------------
+    ALT + arrows       move focus between windows
+    ALT + 1..5         switch workspace
+    ALT + SHIFT + 1..5 throw the window to that workspace
+    ALT + F            fullscreen
+    ALT + V            toggle floating for this window
+
+  Where windows land (set in aerospace.toml)
+  ------------------------------------------
+    1  Terminal, Ghostty, Docker
+    2  Teams, Outlook, Mail
+    3  Word, PowerPoint, Typora, draw.io
+    4  Chrome, Claude, ChatGPT, DuckDuckGo
+    Floating: System Settings, Preview, Stickies,
+              Screen Sharing, NoMachine, Finder
+COL
+
+cat > "$tmp/right" <<'COL'
+  Layout
+  ------
+    ALT + /            back to tiles (one row/column)
+    ALT + SHIFT + arrows   join with the neighbour
+                       in that direction: the pair
+                       shares a column; four in a
+                       row -> 2x2 in two presses.
+    (no automatic grid: AeroSpace is i3-style)
+
+  Service mode:  ALT + SHIFT + ;  then one key
+  -------------------------------------------
+    Esc   reload config
+    r     flatten: undo joins, back to one row
+    f     toggle floating
+
+  Top bar (SketchyBar)
+  --------------------
+    1 2 3 4 5          workspaces, click to switch
+    title              focused window title
+    VOL NET CPU RAM BAT clock
+    The macOS menu bar is hidden: touch the
+    top edge with the pointer to see it.
+
+  Config: ~/dotfiles/aerospace/aerospace.toml
+COL
+
+# Two columns: the left one padded to its widest line + 2, the window
+# resized to fit both. Pad the shorter file with blank lines so paste
+# keeps the right column in place.
+maxlen() { awk '{ if (length > m) m = length } END { print m + 0 }' "$1"; }
+half=$(( $(maxlen "$tmp/left") + 2 ))
+W=$(( half + $(maxlen "$tmp/right") ))
+nl=$(wc -l < "$tmp/left"); nr=$(wc -l < "$tmp/right")
+rows=$(( (nl > nr ? nl : nr) + 4 ))
+printf '\e[8;%d;%dt' "$rows" "$W"      # resize: rows x cols
+sleep 0.2
+clear
+[ "$nl" -lt "$nr" ] && yes '' | head -n $((nr - nl)) >> "$tmp/left"
+[ "$nr" -lt "$nl" ] && yes '' | head -n $((nl - nr)) >> "$tmp/right"
+paste -d '\0' <(awk -v w="$half" '{ printf "%-*s\n", w, $0 }' "$tmp/left") "$tmp/right"
+printf '\n  any key closes this window\n'
+read -rsn1
+
+# Let the script exit first, so Terminal has no running process to
+# complain about; then close this window by its title.
+( sleep 0.3
+  osascript -e 'tell application "Terminal" to close (every window whose name contains "aerospace-help")' >/dev/null 2>&1
+) &
+disown
+exit 0
