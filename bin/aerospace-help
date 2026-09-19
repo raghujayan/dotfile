@@ -43,18 +43,16 @@ cat > "$tmp/left" <<'COL'
     ALT + arrows       move focus between windows
     ALT + 1..5         switch workspace
     ALT + SHIFT + 1..5 throw the window to that workspace
-    ALT + P            personal workspace (WhatsApp, Messages, Mail)
-    ALT + SHIFT + P    throw the window to personal
     ALT + F            fullscreen
     ALT + V            toggle floating for this window
 
   Where windows land (set in aerospace.toml)
   ------------------------------------------
-    1-term          Ghostty, Terminal, Docker
-    2-web           Chrome, DuckDuckGo
-    3-ai            Claude, ChatGPT
-    4-office        Teams, Outlook, Mail, Word, PowerPoint
-    5-productivity  draw.io, Typora
+    1-Work          Teams, Outlook, Word, PowerPoint
+    2-AI            Claude, ChatGPT
+    3-Coding        Ghostty, Terminal, Docker
+    4-Productivity  draw.io, Typora, Chrome, DuckDuckGo
+    5-Personal      WhatsApp, Messages, Mail
     Floating: System Settings, Preview, Stickies,
               Screen Sharing, NoMachine, Finder
 COL
@@ -77,7 +75,7 @@ cat > "$tmp/right" <<'COL'
 
   Top bar (SketchyBar)
   --------------------
-    1-term .. 5-productivity personal   workspaces, click to switch
+    1-Work .. 5-Personal   workspaces, click to switch
     VOL NET CPU RAM BAT clock
     The macOS menu bar is hidden: touch the
     top edge with the pointer to see it.

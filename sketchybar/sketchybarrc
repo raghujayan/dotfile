@@ -18,16 +18,16 @@ sketchybar --default \
   icon.drawing=off
 
 # --- workspaces (left) ------------------------------------------------------
-# Number as the icon, "-name" as the label: reads 1-term. Names mirror the routing
+# Number as the icon, "-name" as the label: reads 1-Work. Names mirror the routing
 # rules in aerospace/aerospace.toml; a workspace without a name shows only
 # its number. (case, not an associative array: /bin/bash is 3.2.)
 ws_name() {
   case "$1" in
-    1) echo term ;;
-    2) echo web ;;
-    3) echo ai ;;
-    4) echo office ;;
-    5) echo productivity ;;
+    1) echo Work ;;
+    2) echo AI ;;
+    3) echo Coding ;;
+    4) echo Productivity ;;
+    5) echo Personal ;;
     *) echo "" ;;
   esac
 }
