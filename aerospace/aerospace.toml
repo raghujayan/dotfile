@@ -6,10 +6,16 @@
 
 config-version = 2
 # v2 stops inferring workspaces from the binds; list them explicitly.
-persistent-workspaces = ['1', '2', '3', '4', '5']
+persistent-workspaces = ['1', '2', '3', '4', '5', 'personal']
 
 after-login-command = []
-after-startup-command = []
+# personal: open the messaging apps once AeroSpace is up; the rules below
+# route them to the personal workspace.
+after-startup-command = [
+  'exec-and-forget open -a WhatsApp',
+  'exec-and-forget open -a Messages',
+  'exec-and-forget open -a Mail',
+]
 start-at-login = true
 
 # Tell SketchyBar which workspace is focused (step 3 of plan.md).
@@ -100,10 +106,6 @@ run = 'move-node-to-workspace 4'
 if.app-id = 'com.microsoft.Outlook'
 run = 'move-node-to-workspace 4'
 
-[[on-window-detected]]
-if.app-id = 'com.apple.mail'
-run = 'move-node-to-workspace 4'
-
 # 3: chat assistants (Word/PowerPoint -> 4, Typora/draw.io -> 5)
 [[on-window-detected]]
 if.app-id = 'com.microsoft.Word'
@@ -137,6 +139,19 @@ run = 'move-node-to-workspace 3'
 [[on-window-detected]]
 if.app-id = 'com.duckduckgo.macos.browser'
 run = 'move-node-to-workspace 2'
+
+# personal: messaging
+[[on-window-detected]]
+if.app-id = 'net.whatsapp.WhatsApp'
+run = 'move-node-to-workspace personal'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.MobileSMS'
+run = 'move-node-to-workspace personal'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.mail'
+run = 'move-node-to-workspace personal'
 
 [key-mapping]
 preset = 'qwerty'
@@ -181,12 +196,14 @@ alt-2 = 'workspace 2'
 alt-3 = 'workspace 3'
 alt-4 = 'workspace 4'
 alt-5 = 'workspace 5'
+alt-p = 'workspace personal'
 
 alt-shift-1 = 'move-node-to-workspace 1'
 alt-shift-2 = 'move-node-to-workspace 2'
 alt-shift-3 = 'move-node-to-workspace 3'
 alt-shift-4 = 'move-node-to-workspace 4'
 alt-shift-5 = 'move-node-to-workspace 5'
+alt-shift-p = 'move-node-to-workspace personal'
 
 # --- housekeeping ----------------------------------------------------------
 # No Hyprland equivalent; AeroSpace has no "exit to login screen".
