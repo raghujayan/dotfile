@@ -28,6 +28,7 @@ ws_name() {
     3) echo Coding ;;
     4) echo Productivity ;;
     5) echo Personal ;;
+    6) echo ParkingLot ;;
     *) echo "" ;;
   esac
 }

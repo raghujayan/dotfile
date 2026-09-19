@@ -6,7 +6,8 @@
 
 config-version = 2
 # v2 stops inferring workspaces from the binds; list them explicitly.
-persistent-workspaces = ['1', '2', '3', '4', '5']
+# 6 ParkingLot has no rules: windows get there by alt-shift-6 only.
+persistent-workspaces = ['1', '2', '3', '4', '5', '6']
 
 after-login-command = []
 # 5 Personal: open the messaging apps once AeroSpace is up; the rules
@@ -196,12 +197,14 @@ alt-2 = 'workspace 2'
 alt-3 = 'workspace 3'
 alt-4 = 'workspace 4'
 alt-5 = 'workspace 5'
+alt-6 = 'workspace 6'
 
 alt-shift-1 = 'move-node-to-workspace 1'
 alt-shift-2 = 'move-node-to-workspace 2'
 alt-shift-3 = 'move-node-to-workspace 3'
 alt-shift-4 = 'move-node-to-workspace 4'
 alt-shift-5 = 'move-node-to-workspace 5'
+alt-shift-6 = 'move-node-to-workspace 6'
 
 # --- housekeeping ----------------------------------------------------------
 # No Hyprland equivalent; AeroSpace has no "exit to login screen".

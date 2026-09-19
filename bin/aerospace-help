@@ -41,8 +41,8 @@ cat > "$tmp/left" <<'COL'
   Getting around
   --------------
     ALT + arrows       move focus between windows
-    ALT + 1..5         switch workspace
-    ALT + SHIFT + 1..5 throw the window to that workspace
+    ALT + 1..6         switch workspace
+    ALT + SHIFT + 1..6 throw the window to that workspace
     ALT + F            fullscreen
     ALT + V            toggle floating for this window
 
@@ -53,6 +53,7 @@ cat > "$tmp/left" <<'COL'
     3-Coding        Ghostty, Terminal, Docker
     4-Productivity  draw.io, Typora, Chrome, DuckDuckGo
     5-Personal      WhatsApp, Messages, Mail
+    6-ParkingLot    nothing by rule; misc, thrown there by hand
     Floating: System Settings, Preview, Stickies,
               Screen Sharing, NoMachine, Finder
 COL
@@ -75,7 +76,7 @@ cat > "$tmp/right" <<'COL'
 
   Top bar (SketchyBar)
   --------------------
-    1-Work .. 5-Personal   workspaces, click to switch
+    1-Work .. 6-ParkingLot   workspaces, click to switch
     VOL NET CPU RAM BAT clock
     The macOS menu bar is hidden: touch the
     top edge with the pointer to see it.
